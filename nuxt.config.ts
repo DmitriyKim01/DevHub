@@ -1,9 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // https://nuxt.com/modules
-  modules: [
-    '@nuxthub/core',
-    '@nuxt/eslint'
+  modules: ['@nuxthub/core', '@nuxt/eslint', 'nuxt-auth-utils'],
+  extends: [
+    'features/users',
+    'features/auth'
   ],
 
   // https://devtools.nuxt.com
