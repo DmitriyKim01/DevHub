@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     'features/auth'
   ],
   // https://nuxt.com/modules
-  modules: ['@nuxthub/core', '@nuxt/eslint', 'nuxt-auth-utils'],
+  modules: ['@nuxthub/core', '@nuxt/eslint'],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
