@@ -22,7 +22,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-01',
 
   // https://hub.nuxt.com/docs/getting-started/installation#options
-  hub: {},
+  hub: {
+    database: true
+  },
 
   // Development config
   eslint: {
