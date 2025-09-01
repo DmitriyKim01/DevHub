@@ -5,10 +5,15 @@ export default defineNuxtConfig({
     'features/auth'
   ],
   // https://nuxt.com/modules
-  modules: ['@nuxthub/core', '@nuxt/eslint'],
+  modules: [
+    '@nuxthub/core',
+    '@nuxt/eslint',
+    '@nuxt/ui'
+  ],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
+  css: ['./app/assets/css/main.css'],
 
   // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
   runtimeConfig: {
