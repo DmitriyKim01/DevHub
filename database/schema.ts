@@ -1,1 +1,1 @@
-export * from '../features/users/server/models/user.schema';
+export { users } from '../features/users/server/models/user.schema';

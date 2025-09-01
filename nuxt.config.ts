@@ -5,11 +5,7 @@ export default defineNuxtConfig({
     'features/auth'
   ],
   // https://nuxt.com/modules
-  modules: [
-    '@nuxthub/core',
-    '@nuxt/eslint',
-    '@nuxt/ui'
-  ],
+  modules: ['@nuxthub/core', '@nuxt/eslint', '@nuxt/ui', 'nuxt-auth-utils'],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
@@ -19,7 +15,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       // Can be overridden by NUXT_PUBLIC_HELLO_TEXT environment variable
-      helloText: 'Hello from the Edge 👋'
+      helloText: 'Hello from the Edge 👋',
+      session: {
+        password: '',
+        name: 'nuxt-auth-session',
+        cookie: {
+          maxAge: 60 * 24 // 1 day
+        }
+      }
     }
   },
   // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
