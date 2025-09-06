@@ -2,10 +2,14 @@ import { z } from 'zod/v4';
 import { useDrizzle, eq } from '~~/database/client';
 import { users } from '~~/database/schema';
 
-const MAX_PASSWORD_LENGTH = 8;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 64;
+
 const loginSchema = z.object({
   email: z.email(),
-  password: z.string().min(MAX_PASSWORD_LENGTH, 'Password must be at least 8 characters long')
+  password: z.string()
+    .min(MIN_PASSWORD_LENGTH, `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`)
+    .max(MAX_PASSWORD_LENGTH, `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`)
 });
 
 export default defineEventHandler(async (event) => {
@@ -17,17 +21,10 @@ export default defineEventHandler(async (event) => {
     where: eq(users.email, body.email)
   });
 
-  if (!existingUser) {
+  if (!existingUser || !existingUser.passwordHash) {
     throw createError({
-      statusCode: 404,
-      statusMessage: 'User not found'
-    });
-  }
-
-  if (!existingUser.passwordHash) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'User does not have a password set'
+      statusCode: 401,
+      statusMessage: 'Invalid credentials'
     });
   }
 
@@ -36,7 +33,7 @@ export default defineEventHandler(async (event) => {
   if (!passwordVerified) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Invalid password'
+      statusMessage: 'Invalid credentials'
     });
   }
 
