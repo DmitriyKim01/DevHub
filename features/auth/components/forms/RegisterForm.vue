@@ -1,9 +1,18 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@nuxt/ui';
-import {
-  registerSchema,
-  type RegisterSchemaType
-} from '../../shared/form-schemas/register';
+import { z } from 'zod/v4';
+
+const REGISTER_FORM_PASSWORD_LENGTH = 8;
+
+const registerFormSchema = z.object({
+  email: z.email(),
+  password: z.string().min(REGISTER_FORM_PASSWORD_LENGTH, 'Password must be at least 8 characters long'),
+  confirmPassword: z.string().min(REGISTER_FORM_PASSWORD_LENGTH, 'Confirm Password must be at least 8 characters long')
+}).refine(data => data.password === data.confirmPassword, {
+  message: 'Passwords do not match'
+});
+
+type RegisterSchemaType = z.output<typeof registerFormSchema>;
 
 const registerFormState = reactive<Partial<RegisterSchemaType>>({
   email: '',
@@ -30,7 +39,7 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterSchemaType>) {
     if (!response.success) {
       throw new Error('Register failed');
     }
-    return navigateTo('/auth/login');
+    await navigateTo('/auth/login');
   }
   catch {
     toast.add({
@@ -43,7 +52,7 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterSchemaType>) {
 
 <template>
   <UForm
-    :schema="registerSchema"
+    :schema="registerFormSchema"
     :state="registerFormState"
     class="mx-auto flex w-full flex-col items-center justify-center space-y-4 rounded-md p-10 shadow-lg/30 sm:max-w-md md:max-w-lg lg:max-w-xl"
     @submit.prevent="onNewUserRegister"

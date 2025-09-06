@@ -1,6 +1,12 @@
-import { loginSchema } from '../../../../shared/form-schemas/login';
+import { z } from 'zod/v4';
 import { useDrizzle, eq } from '~~/database/client';
 import { users } from '~~/database/schema';
+
+const MAX_PASSWORD_LENGTH = 8;
+const loginSchema = z.object({
+  email: z.email(),
+  password: z.string().min(MAX_PASSWORD_LENGTH, 'Password must be at least 8 characters long')
+});
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, loginSchema.parse);

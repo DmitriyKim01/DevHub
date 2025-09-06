@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import { loginSchema, type LoginSchemaType } from '../../shared/form-schemas/login';
+import { z } from 'zod/v4';
+
+const LOGIN_FORM_PASSWORD_LENGTH = 8;
+const loginFormSchema = z.object({
+  email: z.email(),
+  password: z.string().min(LOGIN_FORM_PASSWORD_LENGTH, 'Password must be at least 8 characters long')
+});
+
+type LoginSchemaType = z.output<typeof loginFormSchema>;
 
 const loginFormState = reactive<Partial<LoginSchemaType>>({
   email: '',
@@ -26,16 +34,16 @@ async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
   }
 
   if (error.value) {
-    return;
+    alert(error.value);
   }
   await session.fetch();
-  return navigateTo('/auth');
+  await navigateTo('/auth');
 }
 </script>
 
 <template>
   <UForm
-    :schema="loginSchema"
+    :schema="loginFormSchema"
     :state="loginFormState"
     class="mx-auto flex max-w-[400px] flex-col items-center justify-center space-y-4 rounded-md p-10 shadow-lg/30 sm:max-w-md md:max-w-lg lg:max-w-xl"
     @submit.prevent="onUserLogin"
