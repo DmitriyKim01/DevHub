@@ -2,15 +2,21 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
-const LOGIN_FORM_PASSWORD_LENGTH = 8;
+const MIN_FORM_PASSWORD_LENGTH = 8;
+const MAX_FORM_PASSWORD_LENGTH = 64;
+
 const loginFormSchema = z.object({
   email: z.email(),
-  password: z.string().min(LOGIN_FORM_PASSWORD_LENGTH, 'Password must be at least 8 characters long')
+  password: z.string()
+    .min(MIN_FORM_PASSWORD_LENGTH,
+      `Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`)
+    .max(MAX_FORM_PASSWORD_LENGTH,
+      `Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`)
 });
 
-type LoginSchemaType = z.output<typeof loginFormSchema>;
+type LoginFormSchemaType = z.output<typeof loginFormSchema>;
 
-const loginFormState = reactive<Partial<LoginSchemaType>>({
+const loginFormState = reactive<Partial<LoginFormSchemaType>>({
   email: '',
   password: ''
 });
@@ -19,7 +25,7 @@ const session = useUserSession();
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
+async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
   const loginFormData = event.data;
   const response = await $fetch('/api/v1/auth/login', {
     method: 'POST',
@@ -30,12 +36,9 @@ async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
   });
 
   if (!response.success) {
-    error.value = 'Login failed';
+    throw createError({ statusCode: 400, statusMessage: 'Registration failed' });
   }
 
-  if (error.value) {
-    alert(error.value);
-  }
   await session.fetch();
   await navigateTo('/auth');
 }
@@ -45,7 +48,8 @@ async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
   <UForm
     :schema="loginFormSchema"
     :state="loginFormState"
-    class="mx-auto flex max-w-[400px] flex-col items-center justify-center space-y-4 rounded-md p-10 shadow-lg/30 sm:max-w-md md:max-w-lg lg:max-w-xl"
+    :validate-on="[]"
+    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl p-4 border"
     @submit.prevent="onUserLogin"
   >
     <AuthFormIcon />
@@ -57,16 +61,13 @@ async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
       v-if="error"
       :message="error"
     />
-    <div class="flex w-full flex-col gap-4">
+    <div class="flex w-full flex-col gap-4 p-4">
       <AuthEmailField v-model="loginFormState.email" />
       <AuthPasswordField
         v-model="loginFormState.password"
         label="Password"
         name="password"
       />
-    </div>
-
-    <div class="flex w-full gap-2 font-semibold">
       <UCheckbox
         description="Stay signed in for 7 days on this device"
         label="Remember this device"
@@ -74,7 +75,7 @@ async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
       />
     </div>
 
-    <div class="mt-4 flex w-full flex-col gap-4">
+    <div class="mt-4 flex w-full flex-col gap-4 p-4">
       <UButton
         block
         loading-auto

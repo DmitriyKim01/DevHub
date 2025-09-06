@@ -47,8 +47,6 @@ const text = computed(() => {
       :label="label"
       :name="name"
       class="w-full"
-      error=""
-      required
       size="xl"
     >
       <AuthPasswordInput

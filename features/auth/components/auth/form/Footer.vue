@@ -8,7 +8,9 @@ defineProps<{
 
 <template>
   <div class="flex w-full justify-center gap-2">
-    <p>{{ message }}</p>
+    <p class="text-muted">
+      {{ message }}
+    </p>
     <NuxtLink
       class="text-accent font-semibold"
       :to="to"

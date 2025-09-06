@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <main class="flex h-full min-h-screen w-full flex-col items-center justify-center p-2">
+  <main class="h-full w-screen flex items-center justify-center p-4">
     <AuthLoginForm />
   </main>
 </template>

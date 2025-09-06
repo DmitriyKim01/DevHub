@@ -31,7 +31,7 @@ const error = ref<string | null>(null);
 async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>) {
   const registerFormData = event.data;
 
-  const response = await $fetch<RegisterResponse>('/api/v1/auth/register', {
+  const response = await $fetch('/api/v1/auth/register', {
     method: 'POST',
     body: {
       email: registerFormData.email,
@@ -51,19 +51,20 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>)
   <UForm
     :schema="registerFormSchema"
     :state="registerFormState"
-    class="mx-auto flex w-full flex-col items-center justify-center space-y-4 rounded-md p-10 shadow-lg/30 sm:max-w-md md:max-w-lg lg:max-w-xl"
+    :validate-on="[]"
+    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl p-4 border"
     @submit.prevent="onNewUserRegister"
   >
     <AuthFormIcon />
     <AuthFormSubHeader
-      description="Enter your personal information"
+      description="Enter your email and password"
       title="Register"
     />
     <AuthFormError
       v-if="error"
       :message="error"
     />
-    <div class="flex w-full flex-col gap-4">
+    <div class="flex w-full flex-col p-4 gap-4">
       <AuthEmailField v-model="registerFormState.email" />
       <AuthRegisterPasswordField
         v-model="registerFormState.password"
@@ -77,7 +78,7 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>)
       />
     </div>
 
-    <div class="mt-4 flex w-full flex-col gap-8">
+    <div class="h-full flex flex-col gap-4 p-4">
       <UButton
         block
         loading-auto

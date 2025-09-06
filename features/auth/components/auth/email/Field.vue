@@ -7,7 +7,6 @@ const modelValue = defineModel<string>();
     class="w-full"
     label="Email"
     name="email"
-    required
     size="xl"
   >
     <UInput

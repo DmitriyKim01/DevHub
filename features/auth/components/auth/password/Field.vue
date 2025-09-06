@@ -14,7 +14,6 @@ const modelValue = defineModel<string>();
     :label="label"
     :name="name"
     class="w-full"
-    required
     size="xl"
   >
     <Input

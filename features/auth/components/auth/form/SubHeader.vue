@@ -6,7 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="w-full leading-8 text-center sm:text-start">
+  <div class="w-full pt-12 leading-8 text-center sm:text-start">
     <h2 class="font-semibold text-2xl sm:text-2xl">
       {{ title }}
     </h2>
@@ -15,4 +15,3 @@ defineProps<{
     </p>
   </div>
 </template>
-

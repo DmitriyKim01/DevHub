@@ -8,7 +8,7 @@ defineProps<{
   <UButton
     :disabled="loading"
     block
-    class="bg-gitlab-secondary"
+    class="bg-gitlab-accent-yellow"
     icon="iconoir:gitlab-full"
     size="xl"
     type="button"

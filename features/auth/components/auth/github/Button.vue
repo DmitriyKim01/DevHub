@@ -7,8 +7,8 @@ defineProps<{
 <template>
   <UButton
     :disabled="loading"
+    class="bg-gitlab-background"
     block
-    class="bg-github-secondary"
     icon="iconoir:github"
     size="xl"
     type="button"

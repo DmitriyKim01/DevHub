@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return new RegisterResponse({
+  return {
     success: true
-  });
+  };
 });
