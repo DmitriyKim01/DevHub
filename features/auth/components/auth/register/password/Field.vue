@@ -51,7 +51,7 @@ const text = computed(() => {
       required
       size="xl"
     >
-      <PasswordInput
+      <AuthPasswordInput
         v-model="modelValue"
         :aria-invalid="score < 4"
         :color="color"

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import PasswordInput from './inputs/PasswordInput.vue';
+import Input from './Input.vue';
 
 defineProps<{
   label: string
@@ -17,7 +17,7 @@ const modelValue = defineModel<string>();
     required
     size="xl"
   >
-    <PasswordInput
+    <Input
       v-model="modelValue"
       :ui="{ trailing: 'pe-1' }"
       aria-describedby="password-strength"

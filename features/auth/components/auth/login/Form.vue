@@ -48,18 +48,18 @@ async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
     class="mx-auto flex max-w-[400px] flex-col items-center justify-center space-y-4 rounded-md p-10 shadow-lg/30 sm:max-w-md md:max-w-lg lg:max-w-xl"
     @submit.prevent="onUserLogin"
   >
-    <FormIcon />
-    <FormSubHeader
+    <AuthFormIcon />
+    <AuthFormSubHeader
       description="Login to continue using the app"
       title="Login"
     />
-    <FormError
+    <AuthFormError
       v-if="error"
       :message="error"
     />
     <div class="flex w-full flex-col gap-4">
-      <EmailField v-model="loginFormState.email" />
-      <PasswordField
+      <AuthEmailField v-model="loginFormState.email" />
+      <AuthPasswordField
         v-model="loginFormState.password"
         label="Password"
         name="password"
@@ -87,11 +87,11 @@ async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
       <USeparator label="Or With" />
 
       <div class="flex w-full justify-around gap-4">
-        <GitlabButton :loading="loading" />
-        <GithubButton :loading="loading" />
+        <AuthGitlabButton :loading="loading" />
+        <AuthGithubButton :loading="loading" />
       </div>
 
-      <FormFooterLink
+      <AuthFormFooter
         message="Don't have an account?"
         link-message="Register"
         to="/auth/register"

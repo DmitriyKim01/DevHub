@@ -12,7 +12,7 @@ const show = ref(false);
     icon="iconoir:lock"
   >
     <template #trailing>
-      <ShowPasswordButton
+      <AuthPasswordRevealButton
         :show="show"
         @toggle="show = !show"
       />
