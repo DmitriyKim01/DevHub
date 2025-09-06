@@ -52,7 +52,7 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>)
     :schema="registerFormSchema"
     :state="registerFormState"
     :validate-on="[]"
-    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl p-4 border"
+    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl p-4 border border-muted rounded-lg"
     @submit.prevent="onNewUserRegister"
   >
     <AuthFormIcon />
@@ -83,6 +83,7 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>)
         block
         loading-auto
         size="xl"
+        class="cursor-pointer"
         type="submit"
       >
         Register

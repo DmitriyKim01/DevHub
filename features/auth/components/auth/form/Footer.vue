@@ -14,8 +14,8 @@ defineProps<{
     <NuxtLink
       class="text-accent font-semibold"
       :to="to"
-    >{{
-      linkMessage
-    }}</NuxtLink>
+    >
+      {{ linkMessage }}
+    </NuxtLink>
   </div>
 </template>

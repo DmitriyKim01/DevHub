@@ -7,7 +7,7 @@ defineProps<{
 <template>
   <UButton
     :disabled="loading"
-    class="bg-gitlab-background"
+    class="bg-github-secondary cursor-pointer text-accent"
     block
     icon="iconoir:github"
     size="xl"

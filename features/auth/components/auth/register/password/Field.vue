@@ -7,11 +7,11 @@ const modelValue = defineModel<string>();
 
 function checkStrength(str: string) {
   const requirements = [
-    { regex: /.{8,}/, text: 'At least 8 characters' },
-    { regex: /\d/, text: 'At least 1 number' },
-    { regex: /[a-z]/, text: 'At least 1 lowercase letter' },
-    { regex: /[A-Z]/, text: 'At least 1 uppercase letter' },
-    { regex: /[@$!%*?#&]/, text: 'At least 1 special character: @$!%*?#&' }
+    { regex: /.{8,}/, text: 'at least 8 characters' },
+    { regex: /\d/, text: 'at least 1 number' },
+    { regex: /[a-z]/, text: 'at least 1 lowercase letter' },
+    { regex: /[A-Z]/, text: 'at least 1 uppercase letter' },
+    { regex: /[@$!%*?#&]/, text: 'at least 1 special character' }
   ];
 
   return requirements.map(req => ({
@@ -33,7 +33,7 @@ const color = computed(() => {
 });
 
 const text = computed(() => {
-  if (score.value === 0) return 'Enter a password';
+  if (score.value === 0) return 'Enter a password with';
   if (score.value <= 2) return 'Weak password';
   if (score.value <= 3) return 'Weak password';
   if (score.value === 4) return 'Medium password';
@@ -70,9 +70,9 @@ const text = computed(() => {
     <div>
       <p
         id="password-strength"
-        class="text-md font-medium"
+        class="text-md font-medium mb-1"
       >
-        {{ text }}.
+        {{ text }}
       </p>
 
       <ul
@@ -83,7 +83,7 @@ const text = computed(() => {
           v-for="(req, index) in strength"
           :key="index"
           :class="req.met ? 'text-success' : 'text-muted'"
-          class="flex items-center gap-0.5 text-md"
+          class="flex items-center gap-2 text-md"
         >
           <UIcon
             :name="req.met ? 'iconoir:check-circle' : 'iconoir:xmark-circle'"

@@ -8,6 +8,7 @@ const emit = defineEmits(['toggle']);
 
 <template>
   <UButton
+    class="cursor-pointer"
     :aria-label="show ? 'Hide password' : 'Show password'"
     :aria-pressed="show"
     :icon="show ? 'iconoir:eye-off' : 'iconoir:eye-solid'"

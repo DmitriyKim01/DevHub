@@ -5,7 +5,7 @@ const color = useState('color', () => colors[Math.floor(Math.random() * colors.l
 </script>
 
 <template>
-  <div class="bg-gitlab-background">
+  <div class="bg-github-secondary">
     <h1 :style="{ color }">
       {{ runtimeConfig.public.helloText }}
     </h1>

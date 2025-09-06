@@ -21,7 +21,6 @@ const loginFormState = reactive<Partial<LoginFormSchemaType>>({
   password: ''
 });
 
-const session = useUserSession();
 const loading = ref(false);
 const error = ref<string | null>(null);
 
@@ -39,6 +38,7 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
     throw createError({ statusCode: 400, statusMessage: 'Registration failed' });
   }
 
+  const session = useUserSession();
   await session.fetch();
   await navigateTo('/auth');
 }
@@ -49,7 +49,7 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
     :schema="loginFormSchema"
     :state="loginFormState"
     :validate-on="[]"
-    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl p-4 border"
+    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl p-4 border border-muted rounded-lg"
     @submit.prevent="onUserLogin"
   >
     <AuthFormIcon />
@@ -68,11 +68,11 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
         label="Password"
         name="password"
       />
-      <UCheckbox
-        description="Stay signed in for 7 days on this device"
-        label="Remember this device"
-        size="xl"
-      />
+      <!--      <UCheckbox -->
+      <!--        description="Stay signed in for 7 days on this device" -->
+      <!--        label="Remember this device" -->
+      <!--        size="xl" -->
+      <!--      /> -->
     </div>
 
     <div class="mt-4 flex w-full flex-col gap-4 p-4">
@@ -80,6 +80,7 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
         block
         loading-auto
         size="xl"
+        class="cursor-pointer"
         type="submit"
       >
         Login
