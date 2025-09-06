@@ -1,27 +1,45 @@
 import { loginSchema } from '../../../../shared/form-schemas/login';
-import * as tables from '~~/database/schema';
+import { useDrizzle, eq } from '~~/database/client';
+import { users } from '~~/database/schema';
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, loginSchema.parse);
-  const hashedPassword = await hashPassword(body.password);
 
-  const db = useCustomDatabase();
+  const db = useDrizzle();
 
-  const [user] = await db.insert(tables.users).values({
-    email: body.email,
-    passwordHash: hashedPassword
-  }).returning();
+  const existingUser = await db.query.users.findFirst({
+    where: eq(users.email, body.email)
+  });
 
-  if (!user) {
+  if (!existingUser) {
     throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to create user'
+      statusCode: 404,
+      statusMessage: 'User not found'
+    });
+  }
+
+  if (!existingUser.passwordHash) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'User does not have a password set'
+    });
+  }
+
+  const passwordVerified = await verifyPassword(existingUser.passwordHash, body.password);
+
+  if (!passwordVerified) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Invalid password'
     });
   }
 
   await setUserSession(event, {
-    id: user.id,
-    email: user.email
+    user: {
+      id: existingUser.id,
+      email: existingUser.email
+    },
+    lastLoggedIn: new Date()
   });
 
   return { success: true };

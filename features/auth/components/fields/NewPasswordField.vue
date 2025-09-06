@@ -1,0 +1,105 @@
+<script lang="ts" setup>
+defineProps<{
+  label: string
+  name: string
+}>();
+const modelValue = defineModel<string>();
+
+function checkStrength(str: string) {
+  const requirements = [
+    { regex: /.{8,}/, text: 'At least 8 characters' },
+    { regex: /\d/, text: 'At least 1 number' },
+    { regex: /[a-z]/, text: 'At least 1 lowercase letter' },
+    { regex: /[A-Z]/, text: 'At least 1 uppercase letter' },
+    { regex: /[@$!%*?#&]/, text: 'At least 1 special character: @$!%*?#&' }
+  ];
+
+  return requirements.map(req => ({
+    met: req.regex.test(str),
+    text: req.text
+  }));
+}
+
+const strength = computed(() => checkStrength(modelValue.value ?? ''));
+const score = computed(() => strength.value.filter(req => req.met).length);
+
+const color = computed(() => {
+  if (score.value === 0) return 'neutral';
+  if (score.value <= 1) return 'error';
+  if (score.value <= 2) return 'warning';
+  if (score.value <= 3) return 'warning';
+  if (score.value === 4) return 'warning';
+  return 'success';
+});
+
+const text = computed(() => {
+  if (score.value === 0) return 'Enter a password';
+  if (score.value <= 2) return 'Weak password';
+  if (score.value <= 3) return 'Weak password';
+  if (score.value === 4) return 'Medium password';
+  return 'Strong password';
+});
+</script>
+
+<template>
+  <div class="space-y-4">
+    <UFormField
+      :label="label"
+      :name="name"
+      class="w-full"
+      error=""
+      required
+      size="xl"
+    >
+      <PasswordInput
+        v-model="modelValue"
+        :aria-invalid="score < 4"
+        :color="color"
+        :ui="{ trailing: 'pe-1' }"
+        aria-describedby="password-strength"
+        class="w-full"
+        icon="iconoir:lock"
+      />
+    </UFormField>
+
+    <UProgress
+      :color="color"
+      :indicator="text"
+      :max="5"
+      :model-value="score"
+      size="sm"
+    />
+    <div>
+      <p
+        id="password-strength"
+        class="text-md font-medium"
+      >
+        {{ text }}.
+      </p>
+
+      <ul
+        aria-label="Password requirements"
+        class="space-y-1"
+      >
+        <li
+          v-for="(req, index) in strength"
+          :key="index"
+          :class="req.met ? 'text-success' : 'text-muted'"
+          class="flex items-center gap-0.5 text-md"
+        >
+          <UIcon
+            :name="req.met ? 'iconoir:check-circle' : 'iconoir:xmark-circle'"
+            class="size-4 shrink-0"
+          />
+
+          <span class="font-light">
+            {{ req.text }}
+            <span class="sr-only">
+              {{ req.met ? ' - Requirement met' : ' - Requirement not met' }}
+            </span>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>

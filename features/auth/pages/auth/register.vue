@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div>
-    Hello from Register
-  </div>
+  <main class="flex h-full min-h-screen w-full flex-col items-center justify-center p-2">
+    <RegisterForm />
+  </main>
 </template>

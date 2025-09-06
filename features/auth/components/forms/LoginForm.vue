@@ -7,11 +7,29 @@ const loginFormState = reactive<Partial<LoginSchemaType>>({
   password: ''
 });
 
+const session = useUserSession();
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-async function onLogin(event: FormSubmitEvent<LoginSchemaType>) {
+async function onUserLogin(event: FormSubmitEvent<LoginSchemaType>) {
+  const loginFormData = event.data;
+  const response = await $fetch('/api/v1/auth/login', {
+    method: 'POST',
+    body: {
+      email: loginFormData.email,
+      password: loginFormData.password
+    }
+  });
 
+  if (!response.success) {
+    error.value = 'Login failed';
+  }
+
+  if (error.value) {
+    return;
+  }
+  await session.fetch();
+  return navigateTo('/auth');
 }
 </script>
 
@@ -20,7 +38,7 @@ async function onLogin(event: FormSubmitEvent<LoginSchemaType>) {
     :schema="loginSchema"
     :state="loginFormState"
     class="mx-auto flex max-w-[400px] flex-col items-center justify-center space-y-4 rounded-md p-10 shadow-lg/30 sm:max-w-md md:max-w-lg lg:max-w-xl"
-    @submit.prevent="onLogin"
+    @submit.prevent="onUserLogin"
   >
     <FormIcon />
     <FormSubHeader
@@ -38,13 +56,6 @@ async function onLogin(event: FormSubmitEvent<LoginSchemaType>) {
         label="Password"
         name="password"
       />
-    </div>
-
-    <div class="flex w-full justify-end gap-2 font-semibold">
-      <NuxtLink
-        class="text-accent font-semibold"
-        to="/auth/password-reset/email"
-      >Forgot Password?</NuxtLink>
     </div>
 
     <div class="flex w-full gap-2 font-semibold">
