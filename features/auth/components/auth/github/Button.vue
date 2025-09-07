@@ -12,6 +12,8 @@ defineProps<{
     icon="iconoir:github"
     size="xl"
     type="button"
+    href="/api/v1/oauth/github"
+    external
   >
     Github
   </UButton>
