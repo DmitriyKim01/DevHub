@@ -15,6 +15,20 @@
       "when": 1762059274203,
       "tag": "0001_bent_reaper",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1762393591193,
+      "tag": "0002_clever_jack_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1762394975472,
+      "tag": "0003_lowly_rick_jones",
+      "breakpoints": true
     }
   ]
 }

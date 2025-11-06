@@ -1,5 +1,5 @@
 import { z } from 'zod/v4';
-import { useDrizzle, eq } from '~~/database/client';
+import { eq, useDrizzle } from '~~/database/client';
 import { users } from '~~/database/schema';
 
 const MIN_PASSWORD_LENGTH = 8;

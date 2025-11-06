@@ -1,2 +1,43 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
+
+@theme static {
+  /* --color-primary: #6a6da9;
+  --color-secondary: #a7aad7;
+  --color-accent: #7074cd;
+  --color-background: #f9f9fa;
+  --color-text: #0e0e10; */
+
+  --color-gitlab-primary: #e2432a;
+  --color-gitlab-secondary: #fc6d27;
+  --color-gitlab-accent-yellow: #fca326;
+  --color-gitlab-accent-purple: #554488;
+  --color-gitlab-background: #8c929d;
+
+  --color-github-primary: #6e7781;
+  --color-github-secondary: #2b3137;
+  --color-github-accent: #2dba4e;
+}
+
+/* :root {
+  --ui-primary: var(--color-primary);
+  --ui-secondary: var(--color-secondary);
+} */
+
+/**,*/
+/**::before,*/
+/**::after {*/
+/*    !*outline: 4px solid green !important;*!*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+html,
+body,
+#__nuxt {
+  height: 100%;
+  width: 100%;
+}
+
+/*body {*/
+/*    background-color: var(--color-background);*/
+/*}*/

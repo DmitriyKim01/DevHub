@@ -4,11 +4,11 @@ export const users = sqliteTable('users', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text('name').notNull(),
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash'),
-  avatar: text('avatar').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
 });
 
 export type UserModel = typeof users.$inferSelect;
