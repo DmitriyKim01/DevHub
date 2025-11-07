@@ -42,6 +42,7 @@ export default defineEventHandler(async event => {
     .values({
       email: body.email,
       passwordHash: hashedPassword,
+      authMethod: 'credentials',
     })
     .returning();
 

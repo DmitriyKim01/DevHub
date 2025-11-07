@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `auth_method` text NOT NULL;

@@ -5,30 +5,48 @@ import { z } from 'zod/v4';
 const MIN_FORM_PASSWORD_LENGTH = 8;
 const MAX_FORM_PASSWORD_LENGTH = 64;
 
-const registerFormSchema = z.object({
-  email: z.email(),
-  password: z.string()
-    .min(MIN_FORM_PASSWORD_LENGTH, `Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`)
-    .max(MAX_FORM_PASSWORD_LENGTH, `Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`),
-  confirmPassword: z.string()
-    .min(MIN_FORM_PASSWORD_LENGTH, `Confirm Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`)
-    .max(MAX_FORM_PASSWORD_LENGTH, `Confirm Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`)
-}).refine(data => data.password === data.confirmPassword, {
-  message: 'Passwords do not match'
-});
+const registerFormSchema = z
+  .object({
+    email: z.email(),
+    password: z
+      .string()
+      .min(
+        MIN_FORM_PASSWORD_LENGTH,
+        `Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`
+      )
+      .max(
+        MAX_FORM_PASSWORD_LENGTH,
+        `Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`
+      ),
+    confirmPassword: z
+      .string()
+      .min(
+        MIN_FORM_PASSWORD_LENGTH,
+        `Confirm Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`
+      )
+      .max(
+        MAX_FORM_PASSWORD_LENGTH,
+        `Confirm Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`
+      ),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+  });
 
 type RegisterFormSchemaType = z.output<typeof registerFormSchema>;
 
 const registerFormState = reactive<Partial<RegisterFormSchemaType>>({
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
 });
 
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>) {
+async function onNewUserRegister(
+  event: FormSubmitEvent<RegisterFormSchemaType>
+) {
   const registerFormData = event.data;
 
   const response = await $fetch('/api/v1/auth/register', {
@@ -36,12 +54,15 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>)
     body: {
       email: registerFormData.email,
       password: registerFormData.password,
-      confirmPassword: registerFormData.confirmPassword
-    }
+      confirmPassword: registerFormData.confirmPassword,
+    },
   });
 
   if (!response.success) {
-    throw createError({ statusCode: 400, statusMessage: 'Registration failed' });
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Registration failed',
+    });
   }
   await navigateTo('/auth/login');
 }
@@ -60,10 +81,9 @@ async function onNewUserRegister(event: FormSubmitEvent<RegisterFormSchemaType>)
       description="Enter your email and password"
       title="Register"
     />
-    <AuthFormError
-      v-if="error"
-      :message="error"
-    />
+    <div class="px-4">
+      <UAlert color="error" icon="i-lucide-info" v-if="error" :title="error" />
+    </div>
     <div class="flex w-full flex-col p-4 gap-4">
       <AuthEmailField v-model="registerFormState.email" />
       <AuthRegisterPasswordField

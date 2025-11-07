@@ -6,6 +6,9 @@ export const users = sqliteTable('users', {
     .$defaultFn(() => crypto.randomUUID()),
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash'),
+  authMethod: text('auth_method', {
+    enum: ['credentials', 'oauth', 'passkeys'],
+  }).notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .$defaultFn(() => new Date()),
