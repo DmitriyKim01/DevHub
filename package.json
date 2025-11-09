@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.6",
+    "nodemailer": "^7.0.10",
+    "nuxt-nodemailer": "^1.1.4",
     "wrangler": "^4.45.3"
   }
 }

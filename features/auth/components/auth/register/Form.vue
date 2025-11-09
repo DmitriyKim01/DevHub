@@ -45,12 +45,6 @@ async function onNewUserRegister(
     },
   });
 
-  if (!response.success) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Registration failed',
-    });
-  }
   await navigateTo({
     path: '/auth/confirm/email',
     query: {

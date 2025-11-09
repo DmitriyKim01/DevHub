@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxthub/core', '@nuxt/ui', 'nuxt-auth-utils'],
+  modules: ['@nuxthub/core', '@nuxt/ui', 'nuxt-auth-utils', 'nuxt-nodemailer'],
   css: ['./app/assets/css/main.css'],
   extends: ['features/users', 'features/conversations', 'features/auth'],
   nitro: {
@@ -17,5 +17,15 @@ export default defineNuxtConfig({
   },
   hub: {
     database: true,
+  },
+  nodemailer: {
+    from: '',
+    host: '',
+    port: 999,
+    secure: false,
+    auth: {
+      user: '',
+      pass: '',
+    },
   },
 });
