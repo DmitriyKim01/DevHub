@@ -2,43 +2,28 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
-const MIN_FORM_PASSWORD_LENGTH = 8;
-const MAX_FORM_PASSWORD_LENGTH = 64;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 64;
 
-const registerFormSchema = z
-  .object({
-    email: z.email(),
-    password: z
-      .string()
-      .min(
-        MIN_FORM_PASSWORD_LENGTH,
-        `Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`
-      )
-      .max(
-        MAX_FORM_PASSWORD_LENGTH,
-        `Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`
-      ),
-    confirmPassword: z
-      .string()
-      .min(
-        MIN_FORM_PASSWORD_LENGTH,
-        `Confirm Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`
-      )
-      .max(
-        MAX_FORM_PASSWORD_LENGTH,
-        `Confirm Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`
-      ),
-  })
-  .refine(data => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-  });
+const registerFormSchema = z.object({
+  email: z.email(),
+  password: z
+    .string()
+    .min(
+      MIN_PASSWORD_LENGTH,
+      `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
+    )
+    .max(
+      MAX_PASSWORD_LENGTH,
+      `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`
+    ),
+});
 
 type RegisterFormSchemaType = z.output<typeof registerFormSchema>;
 
 const registerFormState = reactive<Partial<RegisterFormSchemaType>>({
   email: '',
   password: '',
-  confirmPassword: '',
 });
 
 const loading = ref(false);
@@ -54,7 +39,9 @@ async function onNewUserRegister(
     body: {
       email: registerFormData.email,
       password: registerFormData.password,
-      confirmPassword: registerFormData.confirmPassword,
+    },
+    onResponseError({ response }) {
+      error.value = response?._data?.message || 'Login failed';
     },
   });
 
@@ -64,7 +51,12 @@ async function onNewUserRegister(
       statusMessage: 'Registration failed',
     });
   }
-  await navigateTo('/auth/login');
+  await navigateTo({
+    path: '/auth/confirm/email',
+    query: {
+      email: registerFormData.email,
+    },
+  });
 }
 </script>
 
@@ -87,14 +79,9 @@ async function onNewUserRegister(
     <div class="flex w-full flex-col p-4 gap-4">
       <AuthEmailField v-model="registerFormState.email" />
       <AuthRegisterPasswordField
-        v-model="registerFormState.password"
         label="Password"
         name="password"
-      />
-      <AuthPasswordField
-        v-model="registerFormState.confirmPassword"
-        label="Confirm Password"
-        name="confirmPassword"
+        v-model="registerFormState.password"
       />
     </div>
 

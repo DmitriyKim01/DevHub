@@ -1,22 +1,20 @@
 <script lang="ts" setup>
 defineProps<{
-  label: string
-  name: string
+  label: string;
+  name: string;
 }>();
 const modelValue = defineModel<string>();
 
 function checkStrength(str: string) {
   const requirements = [
-    { regex: /.{8,}/, text: 'at least 8 characters' },
-    { regex: /\d/, text: 'at least 1 number' },
     { regex: /[a-z]/, text: 'at least 1 lowercase letter' },
     { regex: /[A-Z]/, text: 'at least 1 uppercase letter' },
-    { regex: /[@$!%*?#&]/, text: 'at least 1 special character' }
+    { regex: /[@$!%*?#&]/, text: 'at least 1 special character' },
   ];
 
   return requirements.map(req => ({
     met: req.regex.test(str),
-    text: req.text
+    text: req.text,
   }));
 }
 
@@ -26,32 +24,26 @@ const score = computed(() => strength.value.filter(req => req.met).length);
 const color = computed(() => {
   if (score.value === 0) return 'neutral';
   if (score.value <= 1) return 'error';
-  if (score.value <= 2) return 'warning';
-  if (score.value <= 3) return 'warning';
-  if (score.value === 4) return 'warning';
-  return 'success';
+  if (score.value === 2) return 'warning';
+  if (score.value === 3) return 'success';
+  return 'neutral';
 });
 
 const text = computed(() => {
   if (score.value === 0) return 'Enter a password with';
-  if (score.value <= 2) return 'Weak password';
-  if (score.value <= 3) return 'Weak password';
-  if (score.value === 4) return 'Medium password';
-  return 'Strong password';
+  if (score.value === 1) return 'Weak password';
+  if (score.value === 2) return 'Medium password';
+  if (score.value === 3) return 'Strong password';
+  return 'Weak password';
 });
 </script>
 
 <template>
   <div class="space-y-4">
-    <UFormField
-      :label="label"
-      :name="name"
-      class="w-full"
-      size="xl"
-    >
+    <UFormField :label="label" :name="name" class="w-full" size="xl">
       <AuthPasswordInput
         v-model="modelValue"
-        :aria-invalid="score < 4"
+        :aria-invalid="score < 3"
         :color="color"
         :ui="{ trailing: 'pe-1' }"
         aria-describedby="password-strength"
@@ -63,22 +55,16 @@ const text = computed(() => {
     <UProgress
       :color="color"
       :indicator="text"
-      :max="5"
+      :max="3"
       :model-value="score"
       size="sm"
     />
     <div>
-      <p
-        id="password-strength"
-        class="text-md font-medium mb-1"
-      >
+      <p id="password-strength" class="text-md font-medium mb-1">
         {{ text }}
       </p>
 
-      <ul
-        aria-label="Password requirements"
-        class="space-y-1"
-      >
+      <ul aria-label="Password requirements" class="space-y-1">
         <li
           v-for="(req, index) in strength"
           :key="index"
