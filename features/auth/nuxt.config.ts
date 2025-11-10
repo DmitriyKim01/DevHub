@@ -1,4 +1,9 @@
+import tailwindcss from '@tailwindcss/vite';
 import { defineNuxtConfig } from 'nuxt/config';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
-export default defineNuxtConfig({});
+export default defineNuxtConfig({
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});

@@ -1,6 +1,11 @@
 import { z } from 'zod/v4';
 import { eq, useDrizzle } from '~~/database/client';
 import { users } from '~~/database/schema';
+import {
+  buildVerificationEmail,
+  generateCode,
+  hashCode,
+} from '../../../utils/verificationCode';
 
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 64;
@@ -35,6 +40,10 @@ export default defineEventHandler(async event => {
     });
   }
 
+  const tokenExpiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 min
+  const token = String(generateCode(100000, 999999)); // 6 digits code
+  const hashedToken = hashCode(token);
+
   const hashedPassword = await hashPassword(body.password);
 
   const [newUser] = await db
@@ -43,6 +52,9 @@ export default defineEventHandler(async event => {
       email: body.email,
       passwordHash: hashedPassword,
       authMethod: 'credentials',
+      verificationToken: hashedToken,
+      verificationTokenExpire: tokenExpiresAt,
+      isVerified: false,
     })
     .returning();
 
@@ -53,7 +65,19 @@ export default defineEventHandler(async event => {
     });
   }
 
-  return {
-    success: true,
-  };
+  const { sendMail } = useNodeMailer();
+
+  const { subject, text, html } = buildVerificationEmail({
+    code: token,
+    appName: 'DevHub',
+    expiresMinutes: 15,
+    supportEmail: 'support@devhub.com',
+  });
+
+  return sendMail({
+    to: body.email,
+    subject,
+    text,
+    html,
+  });
 });

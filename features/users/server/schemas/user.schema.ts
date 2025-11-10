@@ -9,6 +9,11 @@ export const users = sqliteTable('users', {
   authMethod: text('auth_method', {
     enum: ['credentials', 'oauth', 'passkeys'],
   }).notNull(),
+  verificationToken: text('verification_token'),
+  verificationTokenExpire: integer('verification_token_expire', {
+    mode: 'timestamp',
+  }),
+  isVerified: integer({ mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .$defaultFn(() => new Date()),

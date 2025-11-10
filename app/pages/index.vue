@@ -1,5 +1,7 @@
 <template>
-  <div>{{ msg }}</div>
+  <div class="bg-primary h-12 p-24">
+    <div class="bg-secondary h-12"></div>
+  </div>
 </template>
 
 <script setup>

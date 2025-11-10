@@ -35,6 +35,13 @@ export default defineEventHandler(async event => {
     });
   }
 
+  if (!existingUser.isVerified) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Email not verified',
+    });
+  }
+
   const passwordVerified = await verifyPassword(
     existingUser.passwordHash,
     body.password

@@ -26,6 +26,7 @@ export default defineOAuthGitHubEventHandler({
           email,
           passwordHash: null,
           authMethod: 'oauth',
+          isVerified: true,
         })
         .returning();
 

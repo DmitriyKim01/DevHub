@@ -24,20 +24,35 @@
   --ui-secondary: var(--color-secondary);
 } */
 
-/**,*/
-/**::before,*/
-/**::after {*/
-/*    !*outline: 4px solid green !important;*!*/
-/*    box-sizing: border-box;*/
-/*}*/
-
-html,
-body,
-#__nuxt {
-  height: 100%;
-  width: 100%;
-}
-
 /*body {*/
 /*    background-color: var(--color-background);*/
 /*}*/
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: sans-serif;
+    width: 100%;
+    height: 100%;
+    /* color: #333; */
+  }
+
+  body,
+  #__nuxt {
+    width: 100%;
+    height: 100%;
+  }
+}

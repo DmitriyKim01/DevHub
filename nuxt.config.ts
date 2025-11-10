@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     from: '',
     host: '',
     port: 999,
-    secure: false,
+    secure: true,
     auth: {
       user: '',
       pass: '',

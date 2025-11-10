@@ -34,7 +34,7 @@ async function onNewUserRegister(
 ) {
   const registerFormData = event.data;
 
-  const response = await $fetch('/api/v1/auth/register', {
+  await $fetch('/api/v1/auth/register', {
     method: 'POST',
     body: {
       email: registerFormData.email,
