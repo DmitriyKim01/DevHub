@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 defineProps<{
-  to: string
-  message: string
-  linkMessage: string
+  to: string;
+  message: string;
+  linkMessage: string;
 }>();
 </script>
 
@@ -11,11 +11,8 @@ defineProps<{
     <p class="text-muted">
       {{ message }}
     </p>
-    <NuxtLink
-      class="text-accent font-semibold"
-      :to="to"
-    >
+    <ULink :to="to" class="text-primary">
       {{ linkMessage }}
-    </NuxtLink>
+    </ULink>
   </div>
 </template>

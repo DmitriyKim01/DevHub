@@ -62,13 +62,17 @@ async function onNewUserRegister(
     :schema="registerFormSchema"
     :state="registerFormState"
     :validate-on="[]"
-    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl border border-muted rounded-lg form-container"
+    class="w-full max-w-md md:max-w-xl lg:max-w-2xl border border-muted rounded-lg form-container"
     @submit.prevent="onNewUserRegister"
   >
     <AuthFormSubHeader
       description="Enter your email and password"
       title="Register"
     />
+
+    <div class="p-4">
+      <USeparator />
+    </div>
     <div class="px-4">
       <UAlert color="error" icon="i-lucide-info" v-if="error" :title="error" />
     </div>

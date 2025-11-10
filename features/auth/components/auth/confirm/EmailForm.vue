@@ -192,10 +192,18 @@ const remainingMMSS = computed(() => {
           Verify Email
         </UButton>
         <div class="w-full flex justify-around">
-          <ULink as="button" @click="onResendValidationCode" :disabled="loading"
+          <ULink
+            as="button"
+            @click="onResendValidationCode"
+            :disabled="loading"
+            class="cursor-pointer"
             >Resend code</ULink
           >
-          <ULink as="button" @click="onChangeEmail" :disabled="loading"
+          <ULink
+            as="button"
+            @click="onChangeEmail"
+            :disabled="loading"
+            class="cursor-pointer"
             >Change email</ULink
           >
         </div>

@@ -60,6 +60,10 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
       description="Login to continue using the app"
       title="Login"
     />
+
+    <div class="p-4">
+      <USeparator />
+    </div>
     <div class="px-4">
       <UAlert color="error" icon="i-lucide-info" v-if="error" :title="error" />
     </div>
@@ -70,14 +74,12 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
         label="Password"
         name="password"
       />
-      <!--      <UCheckbox -->
-      <!--        description="Stay signed in for 7 days on this device" -->
-      <!--        label="Remember this device" -->
-      <!--        size="xl" -->
-      <!--      /> -->
+      <div>
+        <ULink class="text-left block cursor-pointer">Forgot password?</ULink>
+      </div>
     </div>
 
-    <div class="mt-4 flex w-full flex-col gap-4 p-4">
+    <div class="flex w-full flex-col gap-4 p-4">
       <UButton
         block
         loading-auto

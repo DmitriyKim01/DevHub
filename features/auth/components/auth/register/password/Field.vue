@@ -7,7 +7,7 @@ const modelValue = defineModel<string>();
 
 function checkStrength(str: string) {
   const requirements = [
-    { regex: /[a-z]/, text: 'at least 1 lowercase letter' },
+    { regex: /.{8,}/, text: 'at least 8 characters' },
     { regex: /[A-Z]/, text: 'at least 1 uppercase letter' },
     { regex: /[@$!%*?#&]/, text: 'at least 1 special character' },
   ];
