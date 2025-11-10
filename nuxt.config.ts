@@ -12,11 +12,11 @@ export default defineNuxtConfig({
       openAPI: true,
     },
   },
-  vite: {
-    plugins: [tailwindcss()],
-  },
   hub: {
     database: true,
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
   nodemailer: {
     from: '',
