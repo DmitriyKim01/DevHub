@@ -32,6 +32,7 @@ const error = ref<string | null>(null);
 async function onNewUserRegister(
   event: FormSubmitEvent<RegisterFormSchemaType>
 ) {
+  loading.value = true;
   const registerFormData = event.data;
 
   await $fetch('/api/v1/auth/register', {
@@ -42,9 +43,11 @@ async function onNewUserRegister(
     },
     onResponseError({ response }) {
       error.value = response?._data?.message || 'Login failed';
+      loading.value = false;
     },
   });
 
+  loading.value = false;
   await navigateTo({
     path: '/auth/confirm/email',
     query: {
@@ -59,10 +62,9 @@ async function onNewUserRegister(
     :schema="registerFormSchema"
     :state="registerFormState"
     :validate-on="[]"
-    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl p-4 border border-muted rounded-lg"
+    class="w-full max-w-lg md:max-w-xl lg:max-w-2xl border border-muted rounded-lg form-container"
     @submit.prevent="onNewUserRegister"
   >
-    <AuthFormIcon />
     <AuthFormSubHeader
       description="Enter your email and password"
       title="Register"
@@ -83,6 +85,7 @@ async function onNewUserRegister(
       <UButton
         block
         loading-auto
+        :disabled="loading"
         size="xl"
         class="cursor-pointer"
         type="submit"
@@ -105,3 +108,9 @@ async function onNewUserRegister(
     </div>
   </UForm>
 </template>
+
+<style scoped>
+.form-container {
+  padding: 2rem;
+}
+</style>

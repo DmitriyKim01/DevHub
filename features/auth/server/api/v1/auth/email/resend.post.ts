@@ -1,11 +1,10 @@
 import { z } from 'zod/v4';
 import { eq, useDrizzle } from '~~/database/client';
 import { users } from '~~/database/schema';
-import { compareHashCode } from '../../../utils/verificationCode';
+import { createEmailVerificationToken } from '../../../../utils/verificationCode';
 
 const validateEmailSchema = z.object({
   email: z.email(),
-  code: z.string().length(6, 'Code must be 6 digits'),
 });
 
 export default defineEventHandler(async event => {
@@ -41,29 +40,26 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const expireDateMillis = existingUser.verificationTokenExpire.getTime();
-
-  if (Date.now() >= expireDateMillis) {
-    throw createError({
-      statusCode: 410,
-      statusMessage: 'Verification token expired',
-    });
-  }
-
-  if (!compareHashCode(body.code, existingUser.verificationToken)) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Invalid code',
-    });
-  }
+  const { token, hashedToken, tokenExpiresAt } = createEmailVerificationToken();
 
   await db.update(users).set({
-    isVerified: true,
-    verificationToken: null,
-    verificationTokenExpire: null,
+    verificationToken: hashedToken,
+    verificationTokenExpire: tokenExpiresAt,
   });
 
-  return {
-    success: true,
-  };
+  const { sendMail } = useNodeMailer();
+
+  const { subject, text, html } = buildVerificationEmail({
+    code: token,
+    appName: 'DevHub',
+    expiresMinutes: 15,
+    supportEmail: 'support@devhub.com',
+  });
+
+  return sendMail({
+    to: body.email,
+    subject,
+    text,
+    html,
+  });
 });

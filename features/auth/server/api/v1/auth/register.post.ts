@@ -3,8 +3,7 @@ import { eq, useDrizzle } from '~~/database/client';
 import { users } from '~~/database/schema';
 import {
   buildVerificationEmail,
-  generateCode,
-  hashCode,
+  createEmailVerificationToken,
 } from '../../../utils/verificationCode';
 
 const MIN_PASSWORD_LENGTH = 8;
@@ -40,9 +39,7 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const tokenExpiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 min
-  const token = String(generateCode(100000, 999999)); // 6 digits code
-  const hashedToken = hashCode(token);
+  const { token, hashedToken, tokenExpiresAt } = createEmailVerificationToken();
 
   const hashedPassword = await hashPassword(body.password);
 

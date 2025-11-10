@@ -1,5 +1,12 @@
 import crypto from 'crypto';
 
+export function createEmailVerificationToken() {
+  const tokenExpiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 min
+  const token = String(generateCode(100000, 999999)); // 6 digits code
+  const hashedToken = hashCode(token);
+  return { token, hashedToken, tokenExpiresAt };
+}
+
 export function generateCode(min: number, max: number) {
   return String(crypto.randomInt(min, max));
 }

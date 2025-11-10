@@ -53,10 +53,9 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
     :schema="loginFormSchema"
     :state="loginFormState"
     :validate-on="[]"
-    class="w-full max-w-md md:max-w-xl lg:max-w-2xl p-4 border border-muted rounded-lg"
+    class="w-full max-w-md md:max-w-xl lg:max-w-2xl form-container border border-muted rounded-lg"
     @submit.prevent="onUserLogin"
   >
-    <AuthFormIcon />
     <AuthFormSubHeader
       description="Login to continue using the app"
       title="Login"
@@ -104,3 +103,9 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
     </div>
   </UForm>
 </template>
+
+<style scoped>
+.form-container {
+  padding: 2rem;
+}
+</style>
