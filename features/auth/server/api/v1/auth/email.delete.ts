@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
-import { eq, useDrizzle } from '~~/database/client';
-import { users } from '~~/database/schema';
+import { eq, useDrizzle } from '~~/server/database/client';
+import { users } from '~~/server/database/schema';
 
 const registerBodySchema = z.object({
   email: z.email(),

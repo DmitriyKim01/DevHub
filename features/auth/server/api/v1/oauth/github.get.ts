@@ -1,5 +1,5 @@
-import { eq, useDrizzle } from '~~/database/client';
-import { users } from '~~/database/schema';
+import { eq, useDrizzle } from '~~/server/database/client';
+import { users } from '~~/server/database/schema';
 
 export default defineOAuthGitHubEventHandler({
   async onSuccess(event, { user }) {
