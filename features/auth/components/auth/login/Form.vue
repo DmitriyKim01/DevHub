@@ -2,21 +2,9 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
-const MIN_FORM_PASSWORD_LENGTH = 8;
-const MAX_FORM_PASSWORD_LENGTH = 64;
-
 const loginFormSchema = z.object({
   email: z.email(),
-  password: z
-    .string()
-    .min(
-      MIN_FORM_PASSWORD_LENGTH,
-      `Password must be at least ${MIN_FORM_PASSWORD_LENGTH} characters long`
-    )
-    .max(
-      MAX_FORM_PASSWORD_LENGTH,
-      `Password must be at most ${MAX_FORM_PASSWORD_LENGTH} characters long`
-    ),
+  password: passwordSchema(z),
 });
 
 type LoginFormSchemaType = z.output<typeof loginFormSchema>;

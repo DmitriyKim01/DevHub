@@ -2,21 +2,9 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 64;
-
 const registerFormSchema = z.object({
   email: z.email(),
-  password: z
-    .string()
-    .min(
-      MIN_PASSWORD_LENGTH,
-      `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
-    )
-    .max(
-      MAX_PASSWORD_LENGTH,
-      `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`
-    ),
+  password: passwordSchema(z),
 });
 
 type RegisterFormSchemaType = z.output<typeof registerFormSchema>;
@@ -70,7 +58,7 @@ async function onNewUserRegister(
       title="Register"
     />
 
-    <div class="p-4">
+    <div class="px-4">
       <USeparator />
     </div>
     <div class="px-4">

@@ -55,6 +55,7 @@ async function onValidateEmail(
 
 async function onResendValidationCode() {
   loading.value = true;
+  error.value = null;
 
   if (!confirmEmailFormState.email || confirmEmailFormState.email === '') {
     error.value = 'Missing email address';
@@ -71,7 +72,7 @@ async function onResendValidationCode() {
       loading.value = false;
     },
   });
-
+  startTimer();
   loading.value = false;
 }
 
