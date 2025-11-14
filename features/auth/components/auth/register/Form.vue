@@ -2,6 +2,12 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
+const localePath = useLocalePath();
+
+const { t } = useI18n({
+  useScope: 'local',
+});
+
 const registerFormSchema = z.object({
   email: z.email(),
   password: passwordSchema(z),
@@ -36,12 +42,12 @@ async function onNewUserRegister(
   });
 
   loading.value = false;
-  await navigateTo({
-    path: '/auth/confirm/email',
-    query: {
-      email: registerFormData.email,
-    },
-  });
+  await navigateTo(
+    localePath({
+      route: '/auth/confirm/email',
+      query: { email: registerFormData.email },
+    })
+  );
 }
 </script>
 
@@ -53,10 +59,9 @@ async function onNewUserRegister(
     class="w-full max-w-md md:max-w-xl lg:max-w-2xl border border-default rounded-lg form-container bg-elevated"
     @submit.prevent="onNewUserRegister"
   >
-    <UColorModeSelect />
     <AuthFormSubHeader
-      description="Enter your email and password"
-      title="Register"
+      :description="t('register.description')"
+      :title="t('register.title')"
     />
 
     <div class="px-4">
@@ -68,7 +73,7 @@ async function onNewUserRegister(
     <div class="flex w-full flex-col p-4 gap-4">
       <AuthEmailField v-model="registerFormState.email" />
       <AuthRegisterPasswordField
-        label="Password"
+        :label="t('register.passwordLabel')"
         name="password"
         v-model="registerFormState.password"
       />
@@ -83,10 +88,10 @@ async function onNewUserRegister(
         class="cursor-pointer"
         type="submit"
       >
-        Register
+        {{ t('register.submit') }}
       </UButton>
 
-      <USeparator label="Or With" />
+      <USeparator :label="t('register.or')" />
 
       <div class="flex w-full justify-around gap-4">
         <AuthGitlabButton :loading="loading" />
@@ -94,9 +99,9 @@ async function onNewUserRegister(
       </div>
 
       <AuthFormFooter
-        message="Have an account?"
-        link-message="Sign In"
-        to="/auth/login"
+        :message="t('register.footer.message')"
+        :link-message="t('register.footer.link')"
+        :to="localePath('/auth/login')"
       />
     </div>
   </UForm>
@@ -107,3 +112,41 @@ async function onNewUserRegister(
   padding: 2rem;
 }
 </style>
+
+<i18n lang="json">
+{
+  "en": {
+    "register": {
+      "title": "Register",
+      "description": "Enter your email and password",
+      "passwordLabel": "Password",
+      "submit": "Register",
+      "or": "Or With",
+      "footer": {
+        "message": "Have an account?",
+        "link": "Sign In"
+      }
+    },
+    "error": {
+      "loginFailed": "Login failed"
+    }
+  },
+
+  "fr": {
+    "register": {
+      "title": "Créer un compte",
+      "description": "Entrez votre email et mot de passe",
+      "passwordLabel": "Mot de passe",
+      "submit": "S'inscrire",
+      "or": "Ou avec",
+      "footer": {
+        "message": "Vous avez déjà un compte ?",
+        "link": "Se connecter"
+      }
+    },
+    "error": {
+      "loginFailed": "Échec de la connexion"
+    }
+  }
+}
+</i18n>

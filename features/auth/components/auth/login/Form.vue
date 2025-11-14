@@ -2,6 +2,8 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
+const localePath = useLocalePath();
+
 const loginFormSchema = z.object({
   email: z.email(),
   password: passwordSchema(z),
@@ -19,7 +21,7 @@ const error = ref<string | null>(null);
 
 async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
   const loginFormData = event.data;
-  const response = await $fetch('/api/v1/auth/login', {
+  await $fetch('/api/v1/auth/login', {
     method: 'POST',
     body: {
       email: loginFormData.email,
@@ -32,7 +34,7 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
 
   const session = useUserSession();
   await session.fetch();
-  await navigateTo('/auth');
+  await navigateTo(localePath('/auth'));
 }
 </script>
 
@@ -88,7 +90,7 @@ async function onUserLogin(event: FormSubmitEvent<LoginFormSchemaType>) {
       <AuthFormFooter
         message="Don't have an account?"
         link-message="Register"
-        to="/auth/register"
+        :to="localePath('/auth/register')"
       />
     </div>
   </UForm>

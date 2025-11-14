@@ -2,6 +2,8 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
+const localePath = useLocalePath();
+
 const confirmEmailFormSchema = z.object({
   email: z.string(),
   code: z.array(z.number()).length(6),
@@ -48,9 +50,7 @@ async function onValidateEmail(
   });
 
   loading.value = false;
-  await navigateTo({
-    path: '/auth/',
-  });
+  await navigateTo(localePath('/auth'));
 }
 
 async function onResendValidationCode() {
@@ -79,7 +79,7 @@ async function onResendValidationCode() {
 async function onChangeEmail() {
   loading.value = true;
   if (!confirmEmailFormState.email || confirmEmailFormState.email === '') {
-    await navigateTo('/auth/register');
+    await navigateTo(localePath('/auth/register'));
   }
 
   await $fetch('/api/v1/auth/email', {
@@ -93,7 +93,7 @@ async function onChangeEmail() {
     },
   });
 
-  await navigateTo('/auth/register');
+  await navigateTo(localePath('/auth/register'));
   loading.value = false;
 }
 

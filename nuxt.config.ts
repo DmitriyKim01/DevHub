@@ -12,7 +12,13 @@ export default defineNuxtConfig({
     // public (available client-side if needed)
     public: {},
   },
-  modules: ['@nuxthub/core', '@nuxt/ui', 'nuxt-auth-utils', 'nuxt-nodemailer'],
+  modules: [
+    '@nuxthub/core',
+    '@nuxt/ui',
+    'nuxt-auth-utils',
+    'nuxt-nodemailer',
+    '@nuxtjs/i18n',
+  ],
   css: ['./app/assets/css/main.css'],
   extends: ['features/users', 'features/conversations', 'features/auth'],
   nitro: {
@@ -35,5 +41,14 @@ export default defineNuxtConfig({
       user: '',
       pass: '',
     },
+  },
+
+  i18n: {
+    defaultLocale: 'en',
+    strategy: 'prefix',
+    locales: [
+      { code: 'en', name: 'English', language: 'en-US' },
+      { code: 'fr', name: 'Français', language: 'fr-FR' },
+    ],
   },
 });

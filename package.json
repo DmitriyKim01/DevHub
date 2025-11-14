@@ -13,6 +13,7 @@
   "dependencies": {
     "@nuxt/ui": "^4.1.0",
     "@nuxthub/core": "0.9.0",
+    "@nuxtjs/i18n": "^10.2.0",
     "@tailwindcss/vite": "^4.1.16",
     "drizzle-orm": "^0.44.7",
     "nuxt": "^4.2.0",
