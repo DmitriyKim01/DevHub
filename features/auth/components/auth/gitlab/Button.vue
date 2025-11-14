@@ -12,7 +12,7 @@ defineProps<{
     <UButton
       :disabled="loading"
       color="primary"
-      class="cursor-pointer text-accent"
+      class="cursor-pointer"
       variant="solid"
       block
       icon="iconoir:gitlab-full"
