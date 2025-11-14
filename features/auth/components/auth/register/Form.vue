@@ -50,9 +50,10 @@ async function onNewUserRegister(
     :schema="registerFormSchema"
     :state="registerFormState"
     :validate-on="[]"
-    class="w-full max-w-md md:max-w-xl lg:max-w-2xl border border-muted rounded-lg form-container"
+    class="w-full max-w-md md:max-w-xl lg:max-w-2xl border border-default rounded-lg form-container bg-elevated"
     @submit.prevent="onNewUserRegister"
   >
+    <UColorModeSelect />
     <AuthFormSubHeader
       description="Enter your email and password"
       title="Register"

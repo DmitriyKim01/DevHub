@@ -2,27 +2,72 @@
 @import '@nuxt/ui';
 
 @theme static {
-  /* --color-primary: #6a6da9;
-  --color-secondary: #a7aad7;
-  --color-accent: #7074cd;
-  --color-background: #f9f9fa;
-  --color-text: #0e0e10; */
+  /* Light Mode */
+  --color-light-bg: oklch(0.92 0.01 200);
+  --color-light-bg-elevated: oklch(0.96 0.01 200);
+  --color-light-bg-accented: oklch(1 0.01 200);
 
+  --color-light-text: oklch(0.15 0.02 200);
+  --color-light-text-muted: oklch(0.4 0.02 200);
+
+  --color-light-border: oklch(0.6 0.02 200);
+  --color-light-border-muted: oklch(0.7 0.02 200);
+
+  --color-light-primary: oklch(0.4 0.1 200);
+  --color-light-secondary: oklch(0.4 0.1 20);
+
+  /* Dark Mode */
+  --color-dark-bg: oklch(0.1 0.01 200);
+  --color-dark-bg-elevated: oklch(0.15 0.01 200);
+  --color-dark-bg-accented: oklch(0.2 0.01 200);
+
+  --color-dark-text: oklch(0.96 0.02 200);
+  --color-dark-text-muted: oklch(0.76 0.02 200);
+
+  --color-dark-border: oklch(0.4 0.02 200);
+  --color-dark-border-muted: oklch(0.3 0.02 200);
+
+  --color-dark-primary: oklch(0.76 0.1 200);
+  --color-dark-secondary: oklch(0.76 0.1 20);
+
+  /* Gitlab */
   --color-gitlab-primary: #e2432a;
   --color-gitlab-secondary: #fc6d27;
-  --color-gitlab-accent-yellow: #fca326;
-  --color-gitlab-accent-purple: #554488;
-  --color-gitlab-background: #8c929d;
 
+  /* Github */
   --color-github-primary: #6e7781;
   --color-github-secondary: #2b3137;
-  --color-github-accent: #2dba4e;
 }
 
-/* :root {
-  --ui-primary: var(--color-primary);
-  --ui-secondary: var(--color-secondary);
-} */
+:root {
+  --ui-bg: var(--color-light-bg);
+  --ui-bg-elevated: var(--color-light-bg-elevated);
+  --ui-bg-accented: var(--color-light-bg-accented);
+
+  --ui-text: var(--color-light-text);
+  --ui-text-muted: var(--color-light-text-muted);
+
+  --ui-border: var(--color-light-border);
+  --ui-border-muted: var(--color-light-border-muted);
+
+  --ui-primary: var(--color-light-primary);
+  --ui-secondary: var(--color-light-secondary);
+}
+
+.dark {
+  --ui-bg: var(--color-dark-bg);
+  --ui-bg-elevated: var(--color-dark-bg-elevated);
+  --ui-bg-accented: var(--color-dark-bg-accented);
+
+  --ui-text: var(--color-dark-text);
+  --ui-text-muted: var(--color-dark-text-muted);
+
+  --ui-border: var(--color-dark-border);
+  --ui-border-muted: var(--color-dark-border-muted);
+
+  --ui-primary: var(--color-dark-primary);
+  --ui-secondary: var(--color-dark-secondary);
+}
 
 /*body {*/
 /*    background-color: var(--color-background);*/
