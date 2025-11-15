@@ -9,8 +9,17 @@ const { t } = useI18n({
 });
 
 const registerFormSchema = z.object({
-  email: z.email(),
-  password: passwordSchema(z),
+  email: z.email({ error: t('error.emailInvalid') }),
+  password: z
+    .string()
+    .min(
+      PASSWORD_POLICY.MIN,
+      t('password.error.minLength', { min: PASSWORD_POLICY.MIN })
+    )
+    .max(
+      PASSWORD_POLICY.MAX,
+      t('password.error.maxLength', { max: PASSWORD_POLICY.MAX })
+    ),
 });
 
 type RegisterFormSchemaType = z.output<typeof registerFormSchema>;
@@ -128,7 +137,15 @@ async function onNewUserRegister(
       }
     },
     "error": {
-      "loginFailed": "Login failed"
+      "loginFailed": "Login failed",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required"
+    },
+    "password": {
+      "error": {
+        "minLength": "Password must be at least {min} characters long",
+        "maxLength": "Password must be at most {max} characters long"
+      }
     }
   },
 
@@ -145,7 +162,15 @@ async function onNewUserRegister(
       }
     },
     "error": {
-      "loginFailed": "Échec de la connexion"
+      "loginFailed": "Échec de la connexion",
+      "emailInvalid": "Veuillez entrer une adresse e-mail valide",
+      "passwordRequired": "Le mot de passe est obligatoire"
+    },
+    "password": {
+      "error": {
+        "minLength": "Le mot de passe doit contenir au moins {min} caractères",
+        "maxLength": "Le mot de passe doit contenir au maximum {max} caractères"
+      }
     }
   }
 }

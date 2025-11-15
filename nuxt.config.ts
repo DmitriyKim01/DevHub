@@ -51,4 +51,7 @@ export default defineNuxtConfig({
       { code: 'fr', name: 'Français', language: 'fr-FR' },
     ],
   },
+  build: {
+    analyze: true,
+  },
 });
