@@ -60,10 +60,18 @@ export default defineEventHandler(async event => {
     supportEmail: config.supportEmail,
   });
 
-  return sendMail({
-    to: body.email,
-    subject,
-    text,
-    html,
-  });
+  if (config.featureNodemailerEnabled) {
+    await sendMail({
+      to: body.email,
+      subject,
+      text,
+      html,
+    });
+  } else {
+    console.debug('User token: ' + token);
+  }
+
+  return {
+    verificationTokenExpiresAt: tokenExpiresAt.getTime(),
+  };
 });

@@ -56,10 +56,19 @@ export default defineEventHandler(async event => {
     supportEmail: 'support@devhub.com',
   });
 
-  return sendMail({
-    to: body.email,
-    subject,
-    text,
-    html,
-  });
+  const config = useRuntimeConfig();
+  if (config.featureNodemailerEnabled) {
+    await sendMail({
+      to: body.email,
+      subject,
+      text,
+      html,
+    });
+  } else {
+    console.debug('User token: ' + token);
+  }
+
+  return {
+    verificationTokenExpiresAt: tokenExpiresAt.getTime(),
+  };
 });

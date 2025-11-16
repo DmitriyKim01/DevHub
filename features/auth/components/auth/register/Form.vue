@@ -3,7 +3,6 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
 const localePath = useLocalePath();
-
 const { t } = useI18n({
   useScope: 'local',
 });
@@ -38,27 +37,26 @@ async function onNewUserRegister(
   loading.value = true;
   const registerFormData = event.data;
 
-  await $fetch('/api/v1/auth/register', {
+  const response = await $fetch('/api/v1/auth/register', {
     method: 'POST',
     body: {
       email: registerFormData.email,
       password: registerFormData.password,
     },
     onResponseError({ response }) {
-      error.value = response?._data?.message || 'Login failed';
       loading.value = false;
+      error.value = response?._data?.message || 'Login failed';
     },
   });
 
-  const CODE_TTL_MS = 15 * 60 * 1000;
-  const expiresAt = Date.now() + CODE_TTL_MS;
   loading.value = false;
-  await navigateTo(
-    localePath({
-      route: '/auth/confirm/email',
-      query: { email: registerFormData.email, expiresAt: String(expiresAt) },
-    })
-  );
+  await navigateTo({
+    path: localePath('/auth/confirm/email'),
+    query: {
+      email: registerFormData.email,
+      expireAt: response.verificationTokenExpiresAt,
+    },
+  });
 }
 </script>
 

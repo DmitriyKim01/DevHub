@@ -31,12 +31,12 @@
   --color-dark-secondary: oklch(0.76 0.1 20);
 
   /* Gitlab */
-  --color-gitlab-primary: #e2432a;
-  --color-gitlab-secondary: #fc6d27;
+  --color-gitlab-dark: #e2432a;
+  --color-gitlab-light: #fc6d27;
 
   /* Github */
-  --color-github-primary: #6e7781;
-  --color-github-secondary: #2b3137;
+  --color-github-light: #6e7781;
+  --color-github-dark: #3b4248;
 }
 
 :root {
@@ -52,6 +52,9 @@
 
   --ui-primary: var(--color-light-primary);
   --ui-secondary: var(--color-light-secondary);
+
+  --gitlab-bg: var(--color-gitlab-dark);
+  --github-bg: var(--color-github-dark);
 }
 
 .dark {
@@ -67,6 +70,9 @@
 
   --ui-primary: var(--color-dark-primary);
   --ui-secondary: var(--color-dark-secondary);
+
+  --gitlab-bg: var(--color-gitlab-light);
+  --github-bg: var(--color-github-light);
 }
 
 /*body {*/

@@ -11,7 +11,7 @@ defineProps<{
     <h2 class="font-semibold text-2xl sm:text-2xl">
       {{ title }}
     </h2>
-    <p class="text-dimmed">
+    <p class="text-muted">
       {{ description }}
     </p>
   </div>
