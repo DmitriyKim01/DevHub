@@ -50,11 +50,13 @@ async function onNewUserRegister(
     },
   });
 
+  const CODE_TTL_MS = 15 * 60 * 1000;
+  const expiresAt = Date.now() + CODE_TTL_MS;
   loading.value = false;
   await navigateTo(
     localePath({
       route: '/auth/confirm/email',
-      query: { email: registerFormData.email },
+      query: { email: registerFormData.email, expiresAt: String(expiresAt) },
     })
   );
 }

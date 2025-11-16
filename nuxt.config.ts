@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     'nuxt-nodemailer',
     '@nuxtjs/i18n',
+    '@vueuse/nuxt',
   ],
   css: ['./app/assets/css/main.css'],
   extends: ['features/users', 'features/conversations', 'features/auth'],

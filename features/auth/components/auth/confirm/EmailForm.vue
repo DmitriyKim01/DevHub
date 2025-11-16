@@ -2,8 +2,6 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
-const localePath = useLocalePath();
-
 const confirmEmailFormSchema = z.object({
   email: z.string(),
   code: z.array(z.number()).length(6),
@@ -22,7 +20,15 @@ const error = ref<string | null>(null);
 
 onMounted(() => {
   confirmEmailFormState.email = (route.query.email as string) || '';
-  startTimer();
+
+  const qExpires = route.query.expiresAt;
+  const parsed = qExpires ? Number(qExpires) : 0;
+  const now = Date.now();
+  const fallback = now + 15 * 60 * 1000;
+
+  const effectiveExpiresAt = parsed > now ? parsed : fallback;
+
+  startTimer(effectiveExpiresAt);
 });
 
 onBeforeUnmount(() => {
@@ -43,7 +49,9 @@ async function onValidateEmail(
       code: codeString,
     },
     onResponseError({ response }) {
-      error.value = response?._data?.message || 'Email verification failed';
+      error.value =
+        response?._data?.message ||
+        t('auth.verifyEmail.errors.verificationFailed');
       loading.value = false;
       confirmEmailFormState.code = [];
     },
@@ -58,7 +66,7 @@ async function onResendValidationCode() {
   error.value = null;
 
   if (!confirmEmailFormState.email || confirmEmailFormState.email === '') {
-    error.value = 'Missing email address';
+    error.value = t('auth.verifyEmail.errors.missingEmail');
     return;
   }
 
@@ -68,11 +76,14 @@ async function onResendValidationCode() {
       email: confirmEmailFormState.email,
     },
     onResponseError() {
-      error.value = 'Failed to resend an email';
+      error.value = t('auth.verifyEmail.errors.resendFailed');
       loading.value = false;
     },
   });
-  startTimer();
+
+  const now = Date.now();
+  const fallback = now + 15 * 60 * 1000;
+  startTimer(fallback);
   loading.value = false;
 }
 
@@ -88,7 +99,7 @@ async function onChangeEmail() {
       email: confirmEmailFormState.email,
     },
     onResponseError() {
-      error.value = 'Failed to change email';
+      error.value = t('auth.verifyEmail.errors.changeEmailFailed');
       loading.value = false;
     },
   });
@@ -108,13 +119,12 @@ function tick() {
   if (left === 0 && timer) {
     clearInterval(timer);
     timer = null;
-    error.value =
-      'Your verification code has expired. Please resend a new code.';
+    error.value = t('auth.verifyEmail.errors.codeExpired');
   }
 }
 
-function startTimer(msFromNow = 15 * 60 * 1000) {
-  expiresAt.value = Date.now() + msFromNow;
+function startTimer(expiresAtMs: number) {
+  expiresAt.value = expiresAtMs;
   tick();
   if (timer) clearInterval(timer);
   timer = setInterval(tick, 1000);
@@ -133,14 +143,14 @@ const remainingMMSS = computed(() => {
   <UForm
     :schema="confirmEmailFormSchema"
     :state="confirmEmailFormState"
-    class="max-w-md border border-muted rounded-lg form-container"
+    class="w-full max-w-md md:max-w-xl lg:max-w-2xl border border-default rounded-lg form-container bg-elevated"
     :validate-on="[]"
     @submit.prevent="onValidateEmail"
   >
     <div class="p-12">
       <div class="p-4 text-center font-light text-xl tracking-wide">
         <UIcon class="text-3xl text-primary" name="ic:baseline-email" />
-        <h2>VERIFY YOUR EMAIL ADDRESS</h2>
+        <h2>{{ t('auth.verifyEmail.title') }}</h2>
       </div>
       <div class="p-4">
         <USeparator />
@@ -157,16 +167,18 @@ const remainingMMSS = computed(() => {
 
       <div class="p-4">
         <p class="text-center text-lg">
-          A verification code has been sent to
-          <span class="text-primary">{{ confirmEmailFormState.email }}</span>
+          {{ t('auth.verifyEmail.sentTo') }}
+          <span class="text-secondary">{{ confirmEmailFormState.email }}</span>
         </p>
       </div>
 
       <div class="flex w-full flex-col items-center justify-center p-4 gap-6">
         <p>
-          Please check your inbox and enter the verification code below to
-          verify your email address. The code will expire in
-          {{ remainingMMSS }}
+          {{
+            t('auth.verifyEmail.instructions', {
+              time: remainingMMSS,
+            })
+          }}
         </p>
 
         <UPinInput
@@ -190,7 +202,7 @@ const remainingMMSS = computed(() => {
           class="cursor-pointer"
           type="submit"
         >
-          Verify Email
+          {{ t('auth.verifyEmail.actions.verify') }}
         </UButton>
         <div class="w-full flex justify-around">
           <ULink
@@ -198,14 +210,14 @@ const remainingMMSS = computed(() => {
             @click="onResendValidationCode"
             :disabled="loading"
             class="cursor-pointer"
-            >Resend code</ULink
+            >{{ t('auth.verifyEmail.actions.resend') }}</ULink
           >
           <ULink
             as="button"
             @click="onChangeEmail"
             :disabled="loading"
             class="cursor-pointer"
-            >Change email</ULink
+            >{{ t('auth.verifyEmail.actions.changeEmail') }}</ULink
           >
         </div>
       </div>
@@ -222,3 +234,51 @@ h2 {
   word-spacing: 0.15em;
 }
 </style>
+
+<i18n lang="json">
+{
+  "en": {
+    "auth": {
+      "verifyEmail": {
+        "title": "VERIFY YOUR EMAIL ADDRESS",
+        "sentTo": "A verification code has been sent to {email}",
+        "instructions": "Please check your inbox and enter the verification code below to verify your email address. The code will expire in {time}.",
+        "actions": {
+          "verify": "Verify Email",
+          "resend": "Resend code",
+          "changeEmail": "Change email"
+        },
+        "errors": {
+          "verificationFailed": "Email verification failed",
+          "missingEmail": "Missing email address",
+          "resendFailed": "Failed to resend an email",
+          "changeEmailFailed": "Failed to change email",
+          "codeExpired": "Your verification code has expired. Please resend a new code."
+        }
+      }
+    }
+  },
+
+  "fr": {
+    "auth": {
+      "verifyEmail": {
+        "title": "VÉRIFIEZ VOTRE ADRESSE E-MAIL",
+        "sentTo": "Un code de vérification a été envoyé à {email}",
+        "instructions": "Veuillez vérifier votre boîte de réception et entrer le code de vérification ci-dessous pour valider votre adresse e-mail. Le code expirera dans {time}.",
+        "actions": {
+          "verify": "Vérifier l’e-mail",
+          "resend": "Renvoyer le code",
+          "changeEmail": "Changer d’e-mail"
+        },
+        "errors": {
+          "verificationFailed": "La vérification de l’e-mail a échoué",
+          "missingEmail": "Adresse e-mail manquante",
+          "resendFailed": "Échec de l’envoi du nouvel e-mail",
+          "changeEmailFailed": "Échec de la modification de l’e-mail",
+          "codeExpired": "Votre code de vérification a expiré. Veuillez renvoyer un nouveau code."
+        }
+      }
+    }
+  }
+}
+</i18n>
