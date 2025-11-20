@@ -59,6 +59,8 @@ const confirmEmailFormState = reactive<Partial<ConfirmEmailFormSchemaType>>({
 async function onValidateEmail(
   event: FormSubmitEvent<ConfirmEmailFormSchemaType>
 ) {
+  console.log('test');
+
   loading.value = true;
   const confirmEmailFormData = event.data;
   const codeString = confirmEmailFormData.code.join('');

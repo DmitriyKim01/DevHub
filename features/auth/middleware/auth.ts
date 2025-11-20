@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware(async () => {
 
   await session.fetch();
   if (!session.loggedIn.value) {
-    return navigateTo(localePath('/auth'));
+    return navigateTo(localePath('/auth/register'));
   }
 });
