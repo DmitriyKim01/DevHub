@@ -25,7 +25,7 @@ export function compareHashCode(inputCode: string, storedHash: string) {
 
 export function buildVerificationEmail(opts: {
   code: string;
-  appName?: string;
+  appName?: string | unknown;
   expiresMinutes?: number;
   supportEmail?: string;
 }) {

@@ -6,9 +6,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     // private (server-only)
-    appName: process.env.NUXT_SITE_NAME,
-    supportEmail: process.env.SUPPORT_EMAIL,
-
+    siteName: process.env.NUXT_SITE_NAME,
+    supportEmail: process.env.DEVHUB_SUPPORT_EMAIL,
+    featureNodemailerEnabled: process.env.DEVHUB_FEATURE_NODEMAILER_ENABLED,
     // public (available client-side if needed)
     public: {},
   },
