@@ -54,7 +54,7 @@ export default defineEventHandler(async event => {
   const config = useRuntimeConfig();
   const { subject, text, html } = buildVerificationEmail({
     code: token,
-    appName: config.appName,
+    appName: config.siteName,
     expiresMinutes: 15,
     supportEmail: config.supportEmail,
   });
