@@ -6,18 +6,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     // private (server-only)
-    appName: process.env.APP_NAME,
+    appName: process.env.NUXT_SITE_NAME,
     supportEmail: process.env.SUPPORT_EMAIL,
 
     // public (available client-side if needed)
-    public: {
-      siteUrl: process.env.DEVHUB_PRODUCTION_URL,
-    },
-  },
-  site: {
-    url: process.env.DEVHUB_PRODUCTION_URL,
-    name: process.env.APP_NAME,
-    // ...etc
+    public: {},
   },
   modules: [
     '@nuxthub/core',
@@ -27,14 +20,17 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     'nuxt-nodemailer',
     '@vueuse/nuxt',
+    'nuxt-security',
   ],
   app: {
     head: {
       titleTemplate: '%s | %siteName',
       templateParams: {
-        siteName: process.env.NUXT_APP_NAME,
+        siteName: process.env.NUXT_SITE_NAME,
       },
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/head/logo_dark.ico' },
+      ],
     },
   },
 
@@ -63,7 +59,6 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    baseUrl: process.env.DEVHUB_PRODUCTION_URL,
     defaultLocale: 'en',
     strategy: 'prefix',
     locales: [

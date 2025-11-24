@@ -1,14 +1,22 @@
 <script setup lang="ts">
+import { useSeoMeta } from 'nuxt/app';
+
 const { t } = useI18n({
   useScope: 'local',
 });
 
+defineOgImageComponent('NuxtSeo', {
+  title: t('meta.title'),
+  description: t('meta.ogDescription'),
+  theme: '#00575d',
+  siteLogo: '/head/logo_light.svg',
+  colorMode: 'light',
+});
+
 useSeoMeta({
   title: t('meta.title'),
-  ogTitle: t('meta.title'),
+  ogTitle: t('meta.ogTitle'),
   description: t('meta.description'),
-  ogDescription: t('meta.description'),
-  ogImage: 'https://example.com/image.png',
   twitterCard: 'summary_large_image',
 });
 </script>
@@ -26,13 +34,17 @@ useSeoMeta({
   "en": {
     "meta": {
       "title": "Create your account",
-      "description": "Register for Devhub."
+      "ogTitle": "Join Devhub - The Social Network for Developers",
+      "description": "Join Devhub to showcase your coding projects, publish technical blogs, and network with other developers. Build your tech portfolio today.",
+      "ogDescription": "Join Devhub to showcase your coding projects, publish technical blogs, and network with other developers."
     }
   },
   "fr": {
     "meta": {
-      "title": "Creer votre compte",
-      "description": "Inscrivez vous pour Devhub"
+      "title": "Créez votre compte",
+      "ogTitle": "Rejoignez Devhub - Le réseau social pour développeurs",
+      "description": "Rejoignez Devhub pour présenter vos projets, publier des articles techniques et développer votre réseau. Créez votre portfolio de développeur dès maintenant.",
+      "ogDescription": "Rejoignez Devhub pour présenter vos projets, publier des articles techniques et développer votre réseau."
     }
   }
 }

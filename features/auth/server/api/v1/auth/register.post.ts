@@ -52,7 +52,6 @@ export default defineEventHandler(async event => {
 
   const { sendMail } = useNodeMailer();
   const config = useRuntimeConfig();
-
   const { subject, text, html } = buildVerificationEmail({
     code: token,
     appName: config.appName,
