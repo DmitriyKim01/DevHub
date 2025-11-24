@@ -6,21 +6,9 @@ import {
   createEmailVerificationToken,
 } from '../../../utils/verificationCode';
 
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 64;
-
 const registerBodySchema = z.object({
   email: z.email(),
-  password: z
-    .string()
-    .min(
-      MIN_PASSWORD_LENGTH,
-      `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
-    )
-    .max(
-      MAX_PASSWORD_LENGTH,
-      `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`
-    ),
+  password: passwordSchema(z),
 });
 
 export default defineEventHandler(async event => {
@@ -63,18 +51,26 @@ export default defineEventHandler(async event => {
   }
 
   const { sendMail } = useNodeMailer();
-
+  const config = useRuntimeConfig();
   const { subject, text, html } = buildVerificationEmail({
     code: token,
-    appName: 'DevHub',
+    appName: config.appName,
     expiresMinutes: 15,
-    supportEmail: 'support@devhub.com',
+    supportEmail: config.supportEmail,
   });
 
-  return sendMail({
-    to: body.email,
-    subject,
-    text,
-    html,
-  });
+  if (config.featureNodemailerEnabled) {
+    await sendMail({
+      to: body.email,
+      subject,
+      text,
+      html,
+    });
+  } else {
+    console.debug('User token: ' + token);
+  }
+
+  return {
+    verificationTokenExpiresAt: tokenExpiresAt.getTime(),
+  };
 });

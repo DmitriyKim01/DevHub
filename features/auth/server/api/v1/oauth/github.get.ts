@@ -4,7 +4,7 @@ import { users } from '~~/server/database/schema';
 export default defineOAuthGitHubEventHandler({
   async onSuccess(event, { user }) {
     const db = useDrizzle();
-    const email = user.email?.toLocaleLowerCase();
+    const email = user.email?.toLowerCase();
 
     if (!email) {
       throw createError({
@@ -44,6 +44,6 @@ export default defineOAuthGitHubEventHandler({
         email: savedUser.email,
       },
     });
-    return sendRedirect(event, '/auth');
+    return sendRedirect(event, '/');
   },
 });

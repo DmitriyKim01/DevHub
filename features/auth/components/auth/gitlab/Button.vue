@@ -5,14 +5,11 @@ defineProps<{
 </script>
 
 <template>
-  <div
-    style="--ui-primary: var(--color-gitlab-secondary)"
-    class="w-full h-full"
-  >
+  <div style="--ui-primary: var(--gitlab-bg)" class="w-full h-full">
     <UButton
       :disabled="loading"
       color="primary"
-      class="cursor-pointer text-accent"
+      class="cursor-pointer"
       variant="solid"
       block
       icon="iconoir:gitlab-full"

@@ -3,13 +3,18 @@ defineProps<{
   label: string;
   name: string;
 }>();
+
+const { t } = useI18n({
+  useScope: 'local',
+});
+
 const modelValue = defineModel<string>();
 
 function checkStrength(str: string) {
   const requirements = [
-    { regex: /.{8,}/, text: 'at least 8 characters' },
-    { regex: /[A-Z]/, text: 'at least 1 uppercase letter' },
-    { regex: /[@$!%*?#&]/, text: 'at least 1 special character' },
+    { regex: /.{8,}/, text: 'password.requirements.8chars' },
+    { regex: /[A-Z]/, text: 'password.requirements.uppercase' },
+    { regex: /[@$!%*?#&]/, text: 'password.requirements.special' },
   ];
 
   return requirements.map(req => ({
@@ -30,11 +35,11 @@ const color = computed(() => {
 });
 
 const text = computed(() => {
-  if (score.value === 0) return 'Enter a password with';
-  if (score.value === 1) return 'Weak password';
-  if (score.value === 2) return 'Medium password';
-  if (score.value === 3) return 'Strong password';
-  return 'Weak password';
+  if (score.value === 0) return 'password.strength.enter';
+  if (score.value === 1) return 'password.strength.weak';
+  if (score.value === 2) return 'password.strength.medium';
+  if (score.value === 3) return 'password.strength.strong';
+  return 'password.strength.weak';
 });
 </script>
 
@@ -54,17 +59,17 @@ const text = computed(() => {
 
     <UProgress
       :color="color"
-      :indicator="text"
+      :indicator="t(text)"
       :max="3"
       :model-value="score"
       size="sm"
     />
     <div>
       <p id="password-strength" class="text-md font-medium mb-1">
-        {{ text }}
+        {{ t(text) }}
       </p>
 
-      <ul aria-label="Password requirements" class="space-y-1">
+      <ul :aria-label="t('password.requirements.title')" class="space-y-1">
         <li
           v-for="(req, index) in strength"
           :key="index"
@@ -77,9 +82,13 @@ const text = computed(() => {
           />
 
           <span class="font-light">
-            {{ req.text }}
+            {{ t(req.text) }}
             <span class="sr-only">
-              {{ req.met ? ' - Requirement met' : ' - Requirement not met' }}
+              {{
+                req.met
+                  ? t('password.requirements.met')
+                  : t('password.requirements.notMet')
+              }}
             </span>
           </span>
         </li>
@@ -87,3 +96,44 @@ const text = computed(() => {
     </div>
   </div>
 </template>
+
+<i18n lang="json">
+{
+  "en": {
+    "password": {
+      "strength": {
+        "enter": "Enter a password with",
+        "weak": "Weak password",
+        "medium": "Medium password",
+        "strong": "Strong password"
+      },
+      "requirements": {
+        "title": "Password requirements",
+        "8chars": "At least 8 characters",
+        "uppercase": "At least 1 uppercase letter",
+        "special": "At least 1 special character",
+        "met": " - Requirement met",
+        "notMet": " - Requirement not met"
+      }
+    }
+  },
+  "fr": {
+    "password": {
+      "strength": {
+        "enter": "Entrez un mot de passe avec",
+        "weak": "Mot de passe faible",
+        "medium": "Mot de passe moyen",
+        "strong": "Mot de passe fort"
+      },
+      "requirements": {
+        "title": "Exigences du mot de passe",
+        "8chars": "Au moins 8 caractères",
+        "uppercase": "Au moins 1 lettre majuscule",
+        "special": "Au moins 1 caractère spécial",
+        "met": " - Exigence remplie",
+        "notMet": " - Exigence non remplie"
+      }
+    }
+  }
+}
+</i18n>

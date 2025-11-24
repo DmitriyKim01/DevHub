@@ -5,10 +5,10 @@ defineProps<{
 </script>
 
 <template>
-  <div style="--ui-primary: var(--color-github-primary)" class="w-full h-full">
+  <div style="--ui-primary: var(--github-bg)" class="w-full h-full">
     <UButton
       color="primary"
-      class="cursor-pointer text-accent"
+      class="cursor-pointer"
       variant="solid"
       block
       icon="iconoir:github"

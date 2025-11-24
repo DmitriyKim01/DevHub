@@ -2,21 +2,9 @@ import { z } from 'zod/v4';
 import { eq, useDrizzle } from '~~/server/database/client';
 import { users } from '~~/server/database/schema';
 
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 64;
-
 const loginSchema = z.object({
   email: z.email(),
-  password: z
-    .string()
-    .min(
-      MIN_PASSWORD_LENGTH,
-      `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
-    )
-    .max(
-      MAX_PASSWORD_LENGTH,
-      `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`
-    ),
+  password: passwordSchema(z),
 });
 
 export default defineEventHandler(async event => {
@@ -62,5 +50,7 @@ export default defineEventHandler(async event => {
     lastLoggedIn: new Date(),
   });
 
-  return { success: true };
+  return {
+    success: true,
+  };
 });

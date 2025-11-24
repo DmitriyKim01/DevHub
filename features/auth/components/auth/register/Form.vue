@@ -2,20 +2,22 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 64;
+const localePath = useLocalePath();
+const { t } = useI18n({
+  useScope: 'local',
+});
 
 const registerFormSchema = z.object({
-  email: z.email(),
+  email: z.email({ error: t('error.emailInvalid') }),
   password: z
     .string()
     .min(
-      MIN_PASSWORD_LENGTH,
-      `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
+      PASSWORD_POLICY.MIN,
+      t('password.error.minLength', { min: PASSWORD_POLICY.MIN })
     )
     .max(
-      MAX_PASSWORD_LENGTH,
-      `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`
+      PASSWORD_POLICY.MAX,
+      t('password.error.maxLength', { max: PASSWORD_POLICY.MAX })
     ),
 });
 
@@ -35,23 +37,24 @@ async function onNewUserRegister(
   loading.value = true;
   const registerFormData = event.data;
 
-  await $fetch('/api/v1/auth/register', {
+  const response = await $fetch('/api/v1/auth/register', {
     method: 'POST',
     body: {
       email: registerFormData.email,
       password: registerFormData.password,
     },
     onResponseError({ response }) {
-      error.value = response?._data?.message || 'Login failed';
       loading.value = false;
+      error.value = response?._data?.message || 'Login failed';
     },
   });
 
   loading.value = false;
   await navigateTo({
-    path: '/auth/confirm/email',
+    path: localePath('/auth/confirm/email'),
     query: {
       email: registerFormData.email,
+      expireAt: response.verificationTokenExpiresAt,
     },
   });
 }
@@ -62,15 +65,15 @@ async function onNewUserRegister(
     :schema="registerFormSchema"
     :state="registerFormState"
     :validate-on="[]"
-    class="w-full max-w-md md:max-w-xl lg:max-w-2xl border border-muted rounded-lg form-container"
+    class="w-full max-w-md md:max-w-xl lg:max-w-2xl border border-default rounded-lg form-container bg-elevated"
     @submit.prevent="onNewUserRegister"
   >
     <AuthFormSubHeader
-      description="Enter your email and password"
-      title="Register"
+      :description="t('register.description')"
+      :title="t('register.title')"
     />
 
-    <div class="p-4">
+    <div class="px-4">
       <USeparator />
     </div>
     <div class="px-4">
@@ -79,7 +82,7 @@ async function onNewUserRegister(
     <div class="flex w-full flex-col p-4 gap-4">
       <AuthEmailField v-model="registerFormState.email" />
       <AuthRegisterPasswordField
-        label="Password"
+        :label="t('register.passwordLabel')"
         name="password"
         v-model="registerFormState.password"
       />
@@ -94,10 +97,10 @@ async function onNewUserRegister(
         class="cursor-pointer"
         type="submit"
       >
-        Register
+        {{ t('register.submit') }}
       </UButton>
 
-      <USeparator label="Or With" />
+      <USeparator :label="t('register.or')" />
 
       <div class="flex w-full justify-around gap-4">
         <AuthGitlabButton :loading="loading" />
@@ -105,9 +108,9 @@ async function onNewUserRegister(
       </div>
 
       <AuthFormFooter
-        message="Have an account?"
-        link-message="Sign In"
-        to="/auth/login"
+        :message="t('register.footer.message')"
+        :link-message="t('register.footer.link')"
+        :to="localePath('/auth/login')"
       />
     </div>
   </UForm>
@@ -118,3 +121,57 @@ async function onNewUserRegister(
   padding: 2rem;
 }
 </style>
+
+<i18n lang="json">
+{
+  "en": {
+    "register": {
+      "title": "Register",
+      "description": "Enter your email and password",
+      "passwordLabel": "Password",
+      "submit": "Register",
+      "or": "Or With",
+      "footer": {
+        "message": "Have an account?",
+        "link": "Sign In"
+      }
+    },
+    "error": {
+      "loginFailed": "Login failed",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required"
+    },
+    "password": {
+      "error": {
+        "minLength": "Password must be at least {min} characters long",
+        "maxLength": "Password must be at most {max} characters long"
+      }
+    }
+  },
+
+  "fr": {
+    "register": {
+      "title": "Créer un compte",
+      "description": "Entrez votre email et mot de passe",
+      "passwordLabel": "Mot de passe",
+      "submit": "S'inscrire",
+      "or": "Ou avec",
+      "footer": {
+        "message": "Vous avez déjà un compte ?",
+        "link": "Se connecter"
+      }
+    },
+    "error": {
+      "loginFailed": "Échec de la connexion",
+      "emailInvalid": "Veuillez entrer une adresse e-mail valide",
+      "passwordRequired": "Le mot de passe est obligatoire"
+    },
+    "password": {
+      "error": {
+        "minLength": "Le mot de passe doit contenir au moins {min} caractères",
+        "maxLength": "Le mot de passe doit contenir au maximum {max} caractères"
+      }
+    }
+  }
+}
+</i18n>
